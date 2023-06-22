@@ -48,13 +48,19 @@ function hbar(sample){
             y: topTenY,
             type: "bar",
             orientation:"h",
-            text: labels
+            text: labels,
+            marker: {
+                color: 'rgb(142,124,195)'
+              }
           }];
         
           let layout = {
             height: 600,
             width: 800,
-            title: "Top 10 OTU"
+            title: "Top 10 OTU",
+            font:{
+                family: 'Comic Sans MS, cursive'
+              },
           };
         
           Plotly.newPlot("bar", barData, layout);
@@ -78,20 +84,41 @@ function bubbles(sample){
             mode: "markers",
             marker:{
                 color: otu_ids,
+                colorscale: "Electric",
                 size: sample_values
             }
         };
         console.log("This is bubble",bubbleTrace);
         let layout = {
             title: "Bacteria Per Sample",
+            font:{
+                family: 'Comic Sans MS, cursive'
+              }
             
         };
         Plotly.newPlot("bubble",[bubbleTrace],layout);
     });
    
 }
+
+//Took me forever to figure out the "this" thing in index.html....lol 
 function optionChanged(sampleNum){
 demoInfo(sampleNum);
 hbar(sampleNum);
 bubbles(sampleNum);
 };
+
+//Finally, initialize the page with data, so there is something to see! 
+
+function init(){
+    d3.json(url).then((data)=>{
+        let names = data.names;
+        let startName = names[0];
+        demoInfo(startName);
+        hbar(startName);
+        bubbles(startName);
+       
+    });
+
+}
+init();
